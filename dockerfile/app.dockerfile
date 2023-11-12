@@ -18,6 +18,6 @@ COPY ./app/app.py .
 COPY ./app/templates templates/
 COPY ./app/static static/
 ENV PATH="/home/nonroot/.local/bin:${PATH}"
-
+EXPOSE 5000
 
 ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
