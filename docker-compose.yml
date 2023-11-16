@@ -12,9 +12,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
   redis:
-    build:
-      context: .
-      dockerfile: dockerfile/redis.dockerfile
+    image: cgr.dev/chainguard/redis:latest
     ports:
       - "6379:6379"
     networks:
