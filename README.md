@@ -6,7 +6,7 @@
 - [x] ~~The app and Redis images created by me~~
 - [x] ~~Push images to DockerHub~~
 - [x] ~~Report of image vulnerabilities on readme~~
-- [ ] Signed images
+- [x] ~~Signed images~~
 - [ ] K8s cluster - 3 workers
 - [ ] Manage resources
 - [ ] Min 1000 requests by minutes
@@ -54,3 +54,9 @@ Total: 4 (UNKNOWN: 0, LOW: 1, MEDIUM: 2, HIGH: 1, CRITICAL: 0)
 **mmazoni/linuxtips-giropops-senhas:3.0 (wolfi 20230201)**
 
 Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
+
+## Verify Image Signature
+
+Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we can give the command to verify the signature:
+
+    cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
