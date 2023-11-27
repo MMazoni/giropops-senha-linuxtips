@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: giropops-senha-deployment
+  namespace: giropops
+  labels:
+    app: giropops-senha-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: giropops-senha-deployment
+  template:
+    metadata:
+      labels:
+        app: giropops-senha-deployment
+    spec:
+      containers:
+      - name: giropops-senha-container
+        image: mmazoni/linuxtips-giropops-senhas:3.0
+        ports:
+        - containerPort: 5000
+        env:
+        - name: REDIS_HOST
+          value: localhost
+        - name: REDIS_PORT
+          value: "6379"
+      - name: redis
+        image: cgr.dev/chainguard/redis:latest
+        ports:
+        - containerPort: 6379

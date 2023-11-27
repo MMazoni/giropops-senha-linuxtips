@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: giropops-senha-service
+  namespace: giropops
+spec:
+  selector:
+    app: giropops-senha-deployment
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30080
+  type: NodePort
+
