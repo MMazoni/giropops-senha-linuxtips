@@ -25,6 +25,23 @@ spec:
           value: localhost
         - name: REDIS_PORT
           value: "6379"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 2
+          failureThreshold: 3
       - name: redis
         image: cgr.dev/chainguard/redis:latest
         ports:
