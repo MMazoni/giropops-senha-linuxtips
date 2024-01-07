@@ -1,19 +1,45 @@
 # Giropops Senha
 
-## Assessment
+### Summary
 
-- [x] ~~Lightweight image~~
-- [x] ~~The app and Redis images created by me~~
-- [x] ~~Push images to DockerHub~~
-- [x] ~~Report of image vulnerabilities on readme~~
-- [x] ~~Signed images~~
-- [ ] K8s cluster - 3 workers
-- [ ] Manage resources
-- [ ] Min 1000 requests by minutes
-- [ ] Monitoring with Prometheus
-- [ ] Cert Manager
-- [ ] Ingress
-- [ ] Documentation on readme file
+- [~~Requirements~~](#requirements)
+- [~~Lightweight image~~](#docker)
+- [~~Push images to DockerHub~~](#dockerhub)
+- [~~Report of image vulnerabilities on readme~~](#trivy-report)
+- [~~Signed images~~](#verify-image-signature)
+- [~~K8s cluster with 3 worker~~](#kubernetes)
+- [Resources Optimization](#)
+- [Automation with GitHub Actions](#)
+- [Performance Test - Min 1000 requests by minutes](#)
+- [Monitoring with Prometheus](#)
+- [Cert Manager](#)
+- [Ingress](#)
+- [Documentation on readme file](#)
+
+## Requirements
+
+- docker
+- trivy
+- kind
+- kubectl
+
+## Docker
+
+I've used the [wolfi images from Chainguard](https://www.chainguard.dev/chainguard-images), to build the application with python and use its redis image.
+
+We can test them locally with docker compose:
+
+	docker compose up
+
+## DockerHub
+
+Log into docker in the terminal (use your username):
+
+	docker login -u mmazoni
+
+Push the image you created:
+
+	docker push mmazoni/linuxtips-giropops-senhas:3.0
 
 ## Trivy Report
 
@@ -60,3 +86,16 @@ Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
 Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we can give the command to verify the signature:
 
     cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
+
+## Kubernetes
+
+Install [kind](https://kind.sigs.k8s.io/) to use Kubernetes in Docker locally and kubectl to work with kubernetes API through your terminal.
+
+Use these commands to create the cluster, deployment and service:
+
+	kind create cluster --config=k8s/0.kind-cluster.yml
+	kubectl apply -f k8s/
+
+Now, you can port-forward to access `giropops-senha` with the url http://localhost:3300
+
+	kubectl port-forward -n giropops services/giropops-senha-service 3300:5000

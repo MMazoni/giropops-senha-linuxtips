@@ -1,1 +1,0 @@
-FROM cgr.dev/chainguard/redis:latest
