@@ -13,7 +13,7 @@
 - [Performance Test - Min 1000 requests by minutes](#)
 - [Monitoring with Prometheus](#)
 - [Cert Manager](#)
-- [Ingress](#)
+- [~~Ingress~~](#)
 - [Documentation on readme file](#)
 
 ## Requirements
@@ -29,17 +29,17 @@ I've used the [wolfi images from Chainguard](https://www.chainguard.dev/chaingua
 
 We can test them locally with docker compose:
 
-	docker compose up
+    docker compose up
 
 ## DockerHub
 
 Log into docker in the terminal (use your username):
 
-	docker login -u mmazoni
+    docker login -u mmazoni
 
 Push the image you created:
 
-	docker push mmazoni/linuxtips-giropops-senhas:3.0
+    docker push mmazoni/linuxtips-giropops-senhas:3.0
 
 ## Trivy Report
 
@@ -87,15 +87,39 @@ Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we
 
     cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
 
-## Kubernetes
+## Local Hosts configuration
 
-Install [kind](https://kind.sigs.k8s.io/) to use Kubernetes in Docker locally and kubectl to work with kubernetes API through your terminal.
+Edit the hosts to the application work with ingress.
 
-Use these commands to create the cluster, deployment and service:
+    sudo vim /etc/hosts
 
-	kind create cluster --config=k8s/0.kind-cluster.yml
-	kubectl apply -f k8s/
+Then, add the wildcard for the host:
 
-Now, you can port-forward to access `giropops-senha` with the url http://localhost:3300
+    127.0.0.1 *.kubernetes.local
 
-	kubectl port-forward -n giropops services/giropops-senha-service 3300:5000
+## Kubernetes locally
+
+1. Install [kind](https://kind.sigs.k8s.io/) to use Kubernetes in Docker locally and kubectl to work with kubernetes API through your terminal.
+
+2. Use this command to create the cluster:
+
+    kind create cluster --config=k8s/0.kind-cluster.yml
+
+3. Commands to setup NGINX Ingress Controller:
+
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+    kubectl wait --namespace ingress-nginx \
+          --for=condition=ready pod \
+          --selector=app.kubernetes.io/component=controller \
+          --timeout=90s
+
+4. Apply the manifests
+
+    kubectl apply -f k8s/
+
+5. Access the application
+
+    http://giropops-senhas.kubernetes.local/
+
+
+
