@@ -47,39 +47,13 @@ The wolfi image for python has no vulnerabilities, only the python libs have vul
 
 ### Before
 
-**mmazoni/linuxtips-giropops-senhas:2.0 (wolfi 20230201)**
-
-Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
-
-2023-11-14T10:27:55.565Z        INFO    Table result includes only package filenames. Use '--format json' option to get the full path to the package file.
-
-**Python (python-pkg)**
-
-Total: 4 (UNKNOWN: 0, LOW: 1, MEDIUM: 2, HIGH: 1, CRITICAL: 0)
-
-┌─────────────────────┬────────────────┬──────────┬────────┬───────────────────┬─────────────────────┬──────────────────────────────────────────────────────────────┐
-│       Library       │ Vulnerability  │ Severity │ Status │ Installed Version │    Fixed Version    │                            Title                             │
-├─────────────────────┼────────────────┼──────────┼────────┼───────────────────┼─────────────────────┼──────────────────────────────────────────────────────────────┤
-│ Flask (METADATA)    │ CVE-2023-30861 │ HIGH     │ fixed  │ 2.1.1             │ 2.3.2, 2.2.5        │ Cookie header                                                │
-│                     │                │          │        │                   │                     │ https://avd.aquasec.com/nvd/cve-2023-30861                   │
-├─────────────────────┼────────────────┼──────────┤        ├───────────────────┼─────────────────────┼──────────────────────────────────────────────────────────────┤
-│ Werkzeug (METADATA) │ CVE-2023-46136 │ MEDIUM   │        │ 2.3.0             │ 3.0.1, 2.3.8        │ python-werkzeug: high resource consumption leading to denial │
-│                     │                │          │        │                   │                     │ of service                                                   │
-│                     │                │          │        │                   │                     │ https://avd.aquasec.com/nvd/cve-2023-46136                   │
-├─────────────────────┼────────────────┤          │        ├───────────────────┼─────────────────────┼──────────────────────────────────────────────────────────────┤
-│ redis (METADATA)    │ CVE-2023-28859 │          │        │ 4.5.2             │ 4.5.4, 4.4.4        │ Async command information disclosure                         │
-│                     │                │          │        │                   │                     │ https://avd.aquasec.com/nvd/cve-2023-28859                   │
-│                     ├────────────────┼──────────┤        │                   ├─────────────────────┼──────────────────────────────────────────────────────────────┤
-│                     │ CVE-2023-28858 │ LOW      │        │                   │ 4.4.3, 4.5.3, 4.3.6 │ Async command information disclosure                         │
-│                     │                │          │        │                   │                     │ https://avd.aquasec.com/nvd/cve-2023-28858                   │
-└─────────────────────┴────────────────┴──────────┴────────┴───────────────────┴─────────────────────┴──────────────────────────────────────────────────────────────┘
+![image](https://github.com/MMazoni/giropops-senha-linuxtips/assets/37179593/90c50569-9510-4c00-a444-75af6139c788)
 
 
 ### After
 
-**mmazoni/linuxtips-giropops-senhas:3.0 (wolfi 20230201)**
+![image](https://github.com/MMazoni/giropops-senha-linuxtips/assets/37179593/0f84918b-56f2-4dfa-8f06-07d0cd45c947)
 
-Total: 0 (UNKNOWN: 0, LOW: 0, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
 
 ## Verify Image Signature
 
