@@ -16,7 +16,7 @@ spec:
         app: giropops-senhas
     spec:
       containers:
-      - name: giropops-senhas-container
+      - name: giropops-senhas
         image: mmazoni/linuxtips-giropops-senhas:3.0
         ports:
         - containerPort: 5000

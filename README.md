@@ -94,9 +94,11 @@ Then, add the hosts necessary for the project:
 
     kubectl apply -f manifests/giropops
 
-5. Access the application
+5. See if all pods is running, then access the application
 
-    http://giropops-senhas.kubernetes.local/
+    kubectl get pods -n giropops
+
+http://giropops-senhas.kubernetes.local/
 
 
 ## Monitoring with Prometheus and Grafana
@@ -126,3 +128,17 @@ Then, add the hosts necessary for the project:
 * http://grafana.kubernetes.local
 * http://prometheus.kubernetes.local
 * http://alertmanager.kubernetes.local
+
+6. We will need to override the kube-prometheus ClusterRole to give permissions to the endpoints we want to monitor in the ServiceMonitor and PodMonitor. I want just to mention here the troubleshooting:
+
+    kubectl logs -n monitoring services/prometheus-k8s
+
+![Prometheus logs errors](static/prometheus-logs.png)
+
+    kubectl apply -f manifests/cluster-role.yml
+
+Access here: http://prometheus.kubernetes.local/targets?search=
+
+![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
+
+For some reason, the ServiceMonitor still didn't appear in Prometheus.[TODO]
