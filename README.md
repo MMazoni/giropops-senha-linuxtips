@@ -7,13 +7,14 @@
 - [~~Push images to DockerHub~~](#dockerhub)
 - [~~Report of image vulnerabilities on readme~~](#trivy-report)
 - [~~Signed images~~](#verify-image-signature)
-- [~~K8s cluster with 3 worker~~](#kubernetes)
+- [~~K8s cluster with 3 worker~~](#kubernetes-locally)
+- [~~Ingress~~](#kubernetes-locally)
+- [~~Monitoring with Prometheus~~](#monitoring-with-prometheus-and-grafana)
+- [Configure with OCI](#)
+- [Performance Test - Min 1000 requests by minutes](#)
 - [Resources Optimization](#)
 - [Automation with GitHub Actions](#)
-- [Performance Test - Min 1000 requests by minutes](#)
-- [Monitoring with Prometheus](#)
 - [Cert Manager](#)
-- [~~Ingress~~](#)
 - [Documentation on readme file](#)
 
 ## Requirements
@@ -67,9 +68,12 @@ Edit the hosts to the application work with ingress.
 
     sudo vim /etc/hosts
 
-Then, add the wildcard for the host:
+Then, add the hosts necessary for the project:
 
-    127.0.0.1 *.kubernetes.local
+    127.0.0.1    giropops-senhas.kubernetes.local
+    127.0.0.1    grafana.kubernetes.local
+    127.0.0.1    prometheus.kubernetes.local
+    127.0.0.1    alertmanager.kubernetes.local
 
 ## Kubernetes locally
 
@@ -77,7 +81,7 @@ Then, add the wildcard for the host:
 
 2. Use this command to create the cluster:
 
-    kind create cluster --config=k8s/0.kind-cluster.yml
+    kind create cluster --config=manifests/kind/cluster.yml
 
 3. Commands to setup NGINX Ingress Controller:
 
@@ -89,11 +93,53 @@ Then, add the wildcard for the host:
 
 4. Apply the manifests
 
-    kubectl apply -f k8s/
+    kubectl apply -f manifests/giropops
 
-5. Access the application
+5. See if all pods is running, then access the application
 
-    http://giropops-senhas.kubernetes.local/
+    kubectl get pods -n giropops
+
+http://giropops-senhas.kubernetes.local/
 
 
+## Monitoring with Prometheus and Grafana
 
+1. We will use the [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus) to start monitoring `giropops-senhas`. Now, install the CRDs(Custom Resource Definitions) of kube-prometheus:
+
+    git clone https://github.com/prometheus-operator/kube-prometheus ~/kube-prometheus
+    cd ~/kube-prometheus
+    kubectl create -f manifests/setup
+
+2. Then, install the services (Prometheus, Grafana, Alertmanager, Blackbox, etc)
+
+    kubectl apply -f manifests/
+
+3. Check if everything installed properly:
+
+    kubectl get servicemonitors -n monitoring
+    kubectl get pods -n monitoring
+
+4. Back to the this project and apply the monitoring manifests
+
+    cd giropops-senha-linuxtips/
+    kubectl apply -f manifests/monitoring
+
+5. Now you can access the services:
+
+* http://grafana.kubernetes.local
+* http://prometheus.kubernetes.local
+* http://alertmanager.kubernetes.local
+
+6. We will need to override the kube-prometheus ClusterRole to give permissions to the endpoints we want to monitor in the ServiceMonitor and PodMonitor. I want just to mention here the troubleshooting:
+
+    kubectl logs -n monitoring services/prometheus-k8s
+
+![Prometheus logs errors](static/prometheus-logs.png)
+
+    kubectl apply -f manifests/cluster-role.yml
+
+Access here: http://prometheus.kubernetes.local/targets?search=
+
+![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
+
+For some reason, the ServiceMonitor still didn't appear in Prometheus.[TODO] Configure the alert manager [TODO]
