@@ -20,11 +20,11 @@
 
 ## Requirements
 
-- docker
-- trivy
-- kind
-- kubectl
-- kube-linter(optional)
+- [docker](https://docs.docker.com/engine/install/)
+- [trivy](https://aquasecurity.github.io/trivy/v0.18.3/installation/)
+- [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+- [kube-linter](https://github.com/stackrox/kube-linter#installing-kubelinter) (optional)
 
 ## Docker
 
