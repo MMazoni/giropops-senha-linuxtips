@@ -67,9 +67,12 @@ Edit the hosts to the application work with ingress.
 
     sudo vim /etc/hosts
 
-Then, add the wildcard for the host:
+Then, add the hosts necessary for the project:
 
-    127.0.0.1 *.kubernetes.local
+    127.0.0.1    giropops-senhas.kubernetes.local
+    127.0.0.1    grafana.kubernetes.local
+    127.0.0.1    prometheus.kubernetes.local
+    127.0.0.1    alertmanager.kubernetes.local
 
 ## Kubernetes locally
 
@@ -77,7 +80,7 @@ Then, add the wildcard for the host:
 
 2. Use this command to create the cluster:
 
-    kind create cluster --config=k8s/0.kind-cluster.yml
+    kind create cluster --config=manifests/kind/cluster.yml
 
 3. Commands to setup NGINX Ingress Controller:
 
@@ -89,11 +92,37 @@ Then, add the wildcard for the host:
 
 4. Apply the manifests
 
-    kubectl apply -f k8s/
+    kubectl apply -f manifests/giropops
 
 5. Access the application
 
     http://giropops-senhas.kubernetes.local/
 
 
+## Monitoring with Prometheus and Grafana
 
+1. We will use the [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus) to start monitoring `giropops-senhas`. Now, install the CRDs(Custom Resource Definitions) of kube-prometheus:
+
+    git clone https://github.com/prometheus-operator/kube-prometheus ~/kube-prometheus
+    cd ~/kube-prometheus
+    kubectl create -f manifests/setup
+
+2. Then, install the services (Prometheus, Grafana, Alertmanager, Blackbox, etc)
+
+    kubectl apply -f manifests/
+
+3. Check if everything installed properly:
+
+    kubectl get servicemonitors -n monitoring
+    kubectl get pods -n monitoring
+
+4. Back to the this project and apply the monitoring manifests
+
+    cd giropops-senha-linuxtips/
+    kubectl apply -f manifests/monitoring
+
+5. Now you can access the services:
+
+* http://grafana.kubernetes.local
+* http://prometheus.kubernetes.local
+* http://alertmanager.kubernetes.local
