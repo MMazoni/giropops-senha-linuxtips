@@ -7,6 +7,7 @@
 - [~~Push images to DockerHub~~](#dockerhub)
 - [~~Report of image vulnerabilities on readme~~](#trivy-report)
 - [~~Signed images~~](#verify-image-signature)
+- [~~Kube-linter~~](#kube-linter)
 - [~~K8s cluster with 3 worker~~](#kubernetes-locally)
 - [~~Ingress~~](#kubernetes-locally)
 - [~~Monitoring with Prometheus~~](#monitoring-with-prometheus-and-grafana)
@@ -23,6 +24,7 @@
 - trivy
 - kind
 - kubectl
+- kube-linter(optional)
 
 ## Docker
 
@@ -61,6 +63,12 @@ The wolfi image for python has no vulnerabilities, only the python libs have vul
 Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we can give the command to verify the signature:
 
     cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
+
+## Kube-linter
+
+Kube-linter is configured (GitHub Actions) to run when merging/pushing to `main` branch. You can run locally too, if you want:
+
+    kube-linter lint manifests/ --config .kube-linter.yml
 
 ## Local Hosts configuration
 
