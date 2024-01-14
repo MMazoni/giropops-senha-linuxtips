@@ -20,4 +20,14 @@ spec:
         image: cgr.dev/chainguard/redis:latest
         ports:
         - containerPort: 6379
+        resources:
+          requests:
+            cpu: 0.3
+            memory: 64Mi
+          limits:
+            cpu: 0.5
+            memory: 128Mi
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
         imagePullPolicy: Always

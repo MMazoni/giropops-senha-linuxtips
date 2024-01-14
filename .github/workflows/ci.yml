@@ -5,7 +5,10 @@ on:
   push:
     branches:
       - main
-      - linter-with-github-actions
+  pull_request:
+    branches:
+      - main
+
 
 jobs:
   lint:
@@ -16,3 +19,4 @@ jobs:
         uses: stackrox/kube-linter-action@v1.0.4
         with:
           directory: manifests
+          config: .kube-linter.yml
