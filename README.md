@@ -7,13 +7,14 @@
 - [~~Push images to DockerHub~~](#dockerhub)
 - [~~Report of image vulnerabilities on readme~~](#trivy-report)
 - [~~Signed images~~](#verify-image-signature)
-- [~~K8s cluster with 3 worker~~](#kubernetes)
+- [~~K8s cluster with 3 worker~~](#kubernetes-locally)
+- [~~Ingress~~](#kubernetes-locally)
+- [~~Monitoring with Prometheus~~](#monitoring-with-prometheus-and-grafana)
+- [Configure with OCI](#)
+- [Performance Test - Min 1000 requests by minutes](#)
 - [Resources Optimization](#)
 - [Automation with GitHub Actions](#)
-- [Performance Test - Min 1000 requests by minutes](#)
-- [Monitoring with Prometheus](#)
 - [Cert Manager](#)
-- [~~Ingress~~](#)
 - [Documentation on readme file](#)
 
 ## Requirements
@@ -141,4 +142,4 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 
 ![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
 
-For some reason, the ServiceMonitor still didn't appear in Prometheus.[TODO]
+For some reason, the ServiceMonitor still didn't appear in Prometheus.[TODO] Configure the alert manager [TODO]
