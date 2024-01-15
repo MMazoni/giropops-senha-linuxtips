@@ -151,3 +151,20 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 ![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
 
 For some reason, the ServiceMonitor still didn't appear in Prometheus.[TODO] Configure the alert manager [TODO]
+
+## HPA and Locust
+
+1. This part we will configure the HorizontalPodAutoscaler and use Locust for the stress testing. First, a requirement of HPA is the Metric Server:
+
+    kubectl apply -k manifests/kustomize
+
+I had to do this [patch](https://gist.github.com/sanketsudake/a089e691286bf2189bfedf295222bd43) for setting up locally MetricServer with KinD. That is why I'm using kustomize here.
+
+2. See if it's installed and wait for the :
+
+    kubectl get pods -n kube-system | grep metrics-server
+
+Now we can obtain CPU and memory metrics from nodes and pods
+
+    kubectl top nodes
+    kubectl top pods
