@@ -4,9 +4,3 @@ resources:
   - https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
   - ../../base
 
-patches:
-  - path: ingress.yml
-  # - path: monitoring/cluster-role.yml
-  # - path: monitoring/ingress-alertmanager.yml
-  # - path: monitoring/ingress-grafana.yml
-  # - path: monitoring/ingress-prometheus.yml

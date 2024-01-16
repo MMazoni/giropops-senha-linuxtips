@@ -117,7 +117,7 @@ Then, add the hosts necessary for the project:
 1. Apply the manifests
 
     kubectl apply -k manifests/overlays/kind
-    kubectl apply -f manifests/monitoring
+    kubectl apply -f manifests/overlays/kind/specific
 
 2. See if all pods is running, then access the application
 
@@ -138,3 +138,22 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 ![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
 
 
+## Run cluster in OKE
+
+1. Authenticate in OCI:
+
+    export TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)
+    cd infra/
+    chmod +x refresh-token.sh
+    ./refresh-token
+
+2. Then create the infrastructure with Terraform:
+
+    terraform init
+    terraform apply
+
+3. After that, you cluster will be created and you already connected to it. Do the [monitoring steps](#monitoring-with-prometheus-and-grafana) to your cluster.
+
+4. Apply the manifests:
+
+    k apply -k ../manifests/overlays/oke

@@ -8,6 +8,5 @@ resources:
   - deployment-redis.yml
   - service-app.yml
   - service-redis.yml
-  - ingress.yml
   - servicemonitor.yml
   - podmonitor.yml
