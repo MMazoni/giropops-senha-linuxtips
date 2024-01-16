@@ -8,9 +8,9 @@
 - [~~Report of image vulnerabilities on readme~~](#trivy-report)
 - [~~Signed images~~](#verify-image-signature)
 - [~~Kube-linter~~](#kube-linter)
-- [~~K8s cluster with 3 worker~~](#kubernetes-locally)
-- [~~Ingress~~](#kubernetes-locally)
+- [~~KinD Cluster~~](#create-kind-cluster)
 - [~~Monitoring with Prometheus~~](#monitoring-with-prometheus-and-grafana)
+- [~~Apply the manifests~~](#apply-the-manifests)
 - [Configure with OCI](#)
 - [Performance Test - Min 1000 requests by minutes](#)
 - [Resources Optimization](#)
@@ -25,6 +25,8 @@
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 - [kube-linter](https://github.com/stackrox/kube-linter#installing-kubelinter) (optional)
+- [ingress](#)
+- [kube-prometheus](#)
 
 ## Docker
 
@@ -83,31 +85,13 @@ Then, add the hosts necessary for the project:
     127.0.0.1    prometheus.kubernetes.local
     127.0.0.1    alertmanager.kubernetes.local
 
-## Kubernetes locally
+## Create KinD cluster
 
 1. Install [kind](https://kind.sigs.k8s.io/) to use Kubernetes in Docker locally and kubectl to work with kubernetes API through your terminal.
 
 2. Use this command to create the cluster:
 
-    kind create cluster --config=manifests/kind/cluster.yml
-
-3. Commands to setup NGINX Ingress Controller:
-
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
-    kubectl wait --namespace ingress-nginx \
-          --for=condition=ready pod \
-          --selector=app.kubernetes.io/component=controller \
-          --timeout=90s
-
-4. Apply the manifests
-
-    kubectl apply -f manifests/giropops
-
-5. See if all pods is running, then access the application
-
-    kubectl get pods -n giropops
-
-http://giropops-senhas.kubernetes.local/
+    kind create cluster --config=config/kind/cluster.yml
 
 
 ## Monitoring with Prometheus and Grafana
@@ -127,27 +111,30 @@ http://giropops-senhas.kubernetes.local/
     kubectl get servicemonitors -n monitoring
     kubectl get pods -n monitoring
 
-4. Back to the this project and apply the monitoring manifests
 
-    cd giropops-senha-linuxtips/
+## Apply the manifests
+
+1. Apply the manifests
+
+    kubectl apply -k manifests/overlays/kind
     kubectl apply -f manifests/monitoring
 
-5. Now you can access the services:
+2. See if all pods is running, then access the application
 
+    kubectl get pods -n giropops
+
+* http://giropops-senhas.kubernetes.local/
 * http://grafana.kubernetes.local
 * http://prometheus.kubernetes.local
-* http://alertmanager.kubernetes.local
-
-6. We will need to override the kube-prometheus ClusterRole to give permissions to the endpoints we want to monitor in the ServiceMonitor and PodMonitor. I want just to mention here the troubleshooting:
-
-    kubectl logs -n monitoring services/prometheus-k8s
-
-![Prometheus logs errors](static/prometheus-logs.png)
-
-    kubectl apply -f manifests/cluster-role.yml
 
 Access here: http://prometheus.kubernetes.local/targets?search=
 
+#### Service Monitor
+
+![ServiceMonitor in Prometheus](static/servicemonitor-prometheus.png)
+
+#### Pod Monitor
+
 ![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
 
-For some reason, the ServiceMonitor still didn't appear in Prometheus.[TODO] Configure the alert manager [TODO]
+
