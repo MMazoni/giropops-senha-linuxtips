@@ -2,7 +2,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+  - https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.3/components.yaml
   - ../../base
 
 patches:
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --kubelet-insecure-tls
+    target:
+      version: v1
+      kind: Deployment
+      name: metrics-server
+      namespace: kube-system
   - path: ingress.yml

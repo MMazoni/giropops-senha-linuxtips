@@ -13,4 +13,5 @@ resources:
   - service-prometheus.yml
   - servicemonitor.yml
   - podmonitor.yml
-  - ingress.yml
+  - ingress.
+  - hpa.yml
