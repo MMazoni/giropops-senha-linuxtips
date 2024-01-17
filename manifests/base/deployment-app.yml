@@ -50,16 +50,16 @@ spec:
           successThreshold: 1
           failureThreshold: 3
         imagePullPolicy: Always
-        securityContext:
-            runAsNonRoot: true
-            readOnlyRootFilesystem: true
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - giropops-senhas
-            topologyKey: "kubernetes.io/hostname"
+        # securityContext:
+        #     runAsNonRoot: true
+        #     readOnlyRootFilesystem: true
+      # affinity:
+      #   podAntiAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #     - labelSelector:
+      #         matchExpressions:
+      #         - key: app
+      #           operator: In
+      #           values:
+      #           - giropops-senhas
+      #       topologyKey: "kubernetes.io/hostname"
