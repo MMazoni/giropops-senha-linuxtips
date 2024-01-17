@@ -139,6 +139,8 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 
 ![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
 
+[TODO] serviceMonitor and PodMonitor not working in OKE
+
 
 ## Run cluster in OKE
 

@@ -8,10 +8,7 @@ resources:
   - deployment-redis.yml
   - service-app.yml
   - service-redis.yml
-  - service-alertmanager.yml
-  - service-grafana.yml
-  - service-prometheus.yml
   - servicemonitor.yml
   - podmonitor.yml
-  - ingress.
+  - ingress.yml
   - hpa.yml
