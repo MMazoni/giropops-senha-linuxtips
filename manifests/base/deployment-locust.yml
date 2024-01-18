@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: locust-giropops
+  name: locust-giropops
+  namespace: giropops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-giropops
+  template:
+    metadata:
+      labels:
+        app: locust-giropops
+    spec:
+      containers:
+        - image: mmazoni/locust-giropops:1.0
+          name: locust-giropops
+          env:
+            - name: LOCUST_LOCUSTFILE
+              value: "/usr/src/app/scripts/locustfile.py"
+          # resources:
+          #   limits:
+          #     cpu: 300m
+          #     memory: 512Mi
+          #   requests:
+          #     cpu: 150m
+          #     memory: 128Mi
+          # securityContext:
+          #   readOnlyRootFilesystem: true
+          #   runAsNonRoot: true
+          #   runAsUser: 1000
+          ports:
+            - containerPort: 8089
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: locust-scripts
+              mountPath: /usr/src/app/scripts
+      volumes:
+        - name: locust-scripts
+          configMap:
+            name: locust-scripts
+            optional: true

@@ -12,3 +12,6 @@ resources:
   - podmonitor.yml
   - ingress.yml
   - hpa.yml
+  - deployment-locust.yml
+  - service-locust.yml
+  - configmap-locust.yml

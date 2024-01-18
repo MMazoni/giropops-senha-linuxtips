@@ -6,7 +6,7 @@ metadata:
   labels:
     app: giropops-senhas
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: giropops-senhas
@@ -20,13 +20,13 @@ spec:
         image: mmazoni/linuxtips-giropops-senhas:3.0
         ports:
         - containerPort: 5000
-        resources:
-          requests:
-            cpu: 0.5
-            memory: 128Mi
-          limits:
-            cpu: 0.8
-            memory: 256Mi
+        # resources:
+        #   requests:
+        #     cpu: 0.2
+        #     memory: 128Mi
+        #   limits:
+        #     cpu: 0.3
+        #     memory: 300Mi
         env:
         - name: REDIS_HOST
           value: "redis-service"
