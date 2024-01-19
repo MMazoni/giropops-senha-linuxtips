@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust-giropops
+  namespace: giropops
+spec:
+  selector:
+    app: locust-giropops
+  ports:
+    - protocol: TCP
+      port: 8089
+      targetPort: 8089
+      nodePort: 31601
+  type: NodePort

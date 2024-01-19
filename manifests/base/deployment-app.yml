@@ -6,7 +6,7 @@ metadata:
   labels:
     app: giropops-senhas
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: giropops-senhas
@@ -17,16 +17,16 @@ spec:
     spec:
       containers:
       - name: giropops-senhas
-        image: mmazoni/linuxtips-giropops-senhas:3.0
+        image: mmazoni/linuxtips-giropops-senhas:3.1
         ports:
         - containerPort: 5000
         resources:
           requests:
-            cpu: 0.5
+            cpu: 350m
             memory: 128Mi
           limits:
-            cpu: 0.8
-            memory: 256Mi
+            cpu: 500m
+            memory: 300Mi
         env:
         - name: REDIS_HOST
           value: "redis-service"
@@ -50,16 +50,16 @@ spec:
           successThreshold: 1
           failureThreshold: 3
         imagePullPolicy: Always
-        # securityContext:
-        #     runAsNonRoot: true
-        #     readOnlyRootFilesystem: true
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #     - labelSelector:
-      #         matchExpressions:
-      #         - key: app
-      #           operator: In
-      #           values:
-      #           - giropops-senhas
-      #       topologyKey: "kubernetes.io/hostname"
+        securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - giropops-senhas
+            topologyKey: "kubernetes.io/hostname"

@@ -1,16 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-commonLabels:
-  app: giropops-senhas
 resources:
   - app-namespace.yml
   - deployment-app.yml
   - deployment-redis.yml
   - service-app.yml
   - service-redis.yml
-  - service-alertmanager.yml
-  - service-grafana.yml
-  - service-prometheus.yml
   - servicemonitor.yml
   - podmonitor.yml
   - ingress.yml
+  - hpa.yml
+  - deployment-locust.yml
+  - service-locust.yml
+  - configmap-locust.yml

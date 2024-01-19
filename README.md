@@ -11,9 +11,8 @@
 - [~~KinD Cluster~~](#create-kind-cluster)
 - [~~Monitoring with Prometheus~~](#monitoring-with-prometheus-and-grafana)
 - [~~Apply the manifests~~](#apply-the-manifests)
-- [Configure with OCI](#)
-- [Performance Test - Min 1000 requests by minutes](#)
-- [Resources Optimization](#)
+- [~~Configure with OCI~~](#run-cluster-in-oke)
+- [~~Performance Test - Locust~~](#hpa-and-locust)
 - [Automation with GitHub Actions](#)
 - [Cert Manager](#)
 - [Documentation on readme file](#)
@@ -27,6 +26,8 @@
 - [kube-linter](https://github.com/stackrox/kube-linter#installing-kubelinter) (optional)
 - [ingress](#)
 - [kube-prometheus](#)
+- [terraform](#)
+- [oci-cli](#)
 
 ## Docker
 
@@ -137,23 +138,51 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 
 ![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
 
+[TODO] serviceMonitor and PodMonitor not working in OKE
+
 
 ## Run cluster in OKE
 
-1. Authenticate in OCI:
-
-    export TF_VAR_ssh_public_key=$(cat ~/.ssh/id_rsa.pub)
-    cd infra/
-    chmod +x refresh-token.sh
-    ./refresh-token
+1. Authenticate in OCI following this guide here: https://github.com/Rapha-Borges/oke-free
 
 2. Then create the infrastructure with Terraform:
 
     terraform init
     terraform apply
 
-3. After that, you cluster will be created and you already connected to it. Do the [monitoring steps](#monitoring-with-prometheus-and-grafana) to your cluster.
+3. After that, you cluster will be created and you already connected to it. All the necessary manifests should be applied too.
 
-4. Apply the manifests:
+4. See if it is working:
 
-    k apply -k ../manifests/overlays/oke
+    kubectl get nodes
+
+Now, you can access `giropops-senhas` by the public ip that Terraform shows as output after finishing the provisioning.
+
+http://<public_ip>
+
+## HPA and Locust
+
+1. This part we will configure the HorizontalPodAutoscaler and use Locust for the stress testing. First, a requirement of HPA is the Metric Server:
+
+    kubectl apply -k manifests/base/oke
+
+2. See if it's installed and wait for the :
+
+    kubectl get pods -n kube-system | grep metrics-server
+
+Now we can obtain CPU and memory metrics from nodes and pods
+
+    kubectl top nodes
+    kubectl top pods
+
+3. Access the http://<public_ip>:3000
+Set the users as 1000 and the rate per second as 100.
+
+![Locust load tests](static/locust-tests.png)
+
+Here is the pods resource monitoring in Grafana:
+
+![Grafana Pods Monitoring](static/granafa-locust.png)
+
+## TODO
+- [] Optimize Locust docker image and sign it
