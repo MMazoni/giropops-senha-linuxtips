@@ -24,7 +24,7 @@ variable "ocpus_per_node" {
 
 variable "memory_in_gbs_per_node" {
   type    = number
-  default = 6
+  default = 4
 }
 
 variable "image_id" {
@@ -82,5 +82,26 @@ variable "listerner_port" {
 # ----------> SSH <----------
 
 variable "ssh_public_key" {
+  type    = string
+}
+
+variable "ssh_private_key" {
+  type = string
+  default = "id_rsa"
+}
+
+variable "fingerprint" {
+  type    = string
+}
+
+variable "private_key_path" {
+  type    = string
+}
+
+variable "tenancy_ocid" {
+  type    = string
+}
+
+variable "user_ocid" {
   type    = string
 }

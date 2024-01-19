@@ -16,22 +16,22 @@ spec:
         app: locust-giropops
     spec:
       containers:
-        - image: mmazoni/locust-giropops:1.0
+        - image: mmazoni/locust-giropops:1.1
           name: locust-giropops
           env:
             - name: LOCUST_LOCUSTFILE
               value: "/usr/src/app/scripts/locustfile.py"
-          # resources:
-          #   limits:
-          #     cpu: 300m
-          #     memory: 512Mi
-          #   requests:
-          #     cpu: 150m
-          #     memory: 128Mi
-          # securityContext:
-          #   readOnlyRootFilesystem: true
-          #   runAsNonRoot: true
-          #   runAsUser: 1000
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
           ports:
             - containerPort: 8089
           imagePullPolicy: Always
