@@ -42,10 +42,18 @@ jobs:
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
-      - name: Build and push
-        run: |
-          docker build --file dockerfile/app.dockerfile -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }},${{ env.DOCKER_IMAGE }}:latest --push .
-
+      # - name: Build and push
+      #   run: |
+      #     docker build --file dockerfile/app.dockerfile -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }},${{ env.DOCKER_IMAGE }}:latest .
+      - name: Docker build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: dockerfile/app.dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+            ${{ env.DOCKER_IMAGE }}:latest
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.2.0
       - name: Sign image
