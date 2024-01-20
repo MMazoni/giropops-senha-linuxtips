@@ -74,7 +74,15 @@ The wolfi image for Python has no vulnerabilities, only the Python libs have vul
 
 Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we can give the command to verify the signature:
 
-    cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.1
+    cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
+
+In the GitHub Actions workflow, we are using keyless signing, so to verify use the command below:
+
+```
+cosign verify mmazoni/linuxtips-giropops-senhas:latest \
+  --certificate-identity https://github.com/MMazoni/giropops-senha-linuxtips/.github/workflows/deploy.yml@refs/heads/main \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
+```
 
 ## Kube-linter
 
