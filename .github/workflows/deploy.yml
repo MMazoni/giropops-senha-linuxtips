@@ -1,0 +1,48 @@
+---
+name: Continous Integration
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKERHUB_USERNAME: mmazoni
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  TAG: ${{ github.sha }}
+
+jobs:
+  lint:
+    name: Kubernetes Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Kube-linter
+        uses: stackrox/kube-linter-action@v1.0.4
+        with:
+          directory: manifests
+          config: .kube-linter.yml
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ env.DOCKERHUB_TOKEN }}
+          docker build --file dockerfile/app.dockerfile -t ${{ env.DOCKERHUB_USERNAME }}/linuxtips-giropops-senhas:${{ env.TAG }} --push .
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.2.0
+
+      - name: Sign and Push
+        run: |
+          cosign sign --key ${{ env. DOCKERHUB_USERNAME }}/linuxtips-giropops-senhas:${{ env.TAG }}
+
+    needs: lint
+  
