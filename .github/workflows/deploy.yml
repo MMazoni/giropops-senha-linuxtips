@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - main
+      - github_actions
+    # paths:
+    #   - 'app/**'
+    #   - 'dockerfile/app.dockerfile'
 
 env:
   DOCKERHUB_USERNAME: mmazoni
@@ -42,7 +46,6 @@ jobs:
 
       - name: Sign and Push
         run: |
-          cosign sign --key ${{ env. DOCKERHUB_USERNAME }}/linuxtips-giropops-senhas:${{ env.TAG }}
-
+          cosign sign --yes ${{ env.TAG }}
     needs: lint
-  
+
