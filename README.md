@@ -13,7 +13,7 @@ This is a password generator application created by Linuxtips. The challenge is 
 - [KinD Cluster](#create-kind-cluster)
 - [Run cluster in OKE](#run-cluster-in-oke)
 - [Monitoring with Prometheus](#monitoring-with-prometheus-and-grafana)
-- [Performance Test - Locust~~](#hpa-and-locust)
+- [Performance Test - Locust](#hpa-and-locust)
 
 
 ## TODO
