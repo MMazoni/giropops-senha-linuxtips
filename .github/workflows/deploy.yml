@@ -5,10 +5,9 @@ on:
   push:
     branches:
       - main
-      - github_actions
-    # paths:
-    #   - 'app/**'
-    #   - 'dockerfile/app.dockerfile'
+    paths:
+      - 'app/**'
+      - 'dockerfile/app.dockerfile'
 
 env:
   DOCKERHUB_USERNAME: mmazoni
@@ -42,9 +41,6 @@ jobs:
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
-      # - name: Build and push
-      #   run: |
-      #     docker build --file dockerfile/app.dockerfile -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }},${{ env.DOCKER_IMAGE }}:latest .
       - name: Docker build and push
         uses: docker/build-push-action@v5
         with:
