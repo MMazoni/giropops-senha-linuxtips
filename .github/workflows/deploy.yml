@@ -65,6 +65,6 @@ jobs:
         uses: sigstore/cosign-installer@v3.2.0
       - name: Sign and Push
         run: |
-          cosign sign ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          cosign sign --yes ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
     needs: lint
 
