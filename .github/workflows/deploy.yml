@@ -66,6 +66,6 @@ jobs:
         uses: sigstore/cosign-installer@v3.2.0
       - name: Sign and Push
         run: |
-          cosign sign --yes ${{ steps.docker-build.outputs.digest }}
+          cosign sign ${{ steps.docker-build.outputs.digest }}
     needs: lint
 
