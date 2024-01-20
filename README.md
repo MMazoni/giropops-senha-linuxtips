@@ -1,6 +1,6 @@
 # Giropops Senhas
 
-This is a password generator application created by Linuxtips. The challenge is to put this into a kubernetes cluster with all we learned in PICK (Programa Intensivo de Containers e Kubernetes).
+This is a password generator application created by Linuxtips. The challenge is to put this into a Kubernetes cluster with all we learned in PICK (Programa Intensivo de Containers e Kubernetes).
 
 ### Summary
 
@@ -20,9 +20,9 @@ This is a password generator application created by Linuxtips. The challenge is 
 
 - [ ] Automation with GitHub Actions Deploying application in OKE
 - [ ] Cert Manager
-- [ ] Complete Documentation on readme file
+- [ ] Complete Documentation on the README file
 - [ ] Fix Service and Pod Monitors not working in OKE
-- [ ] Sign Locust image and reduce its size
+- [ ] Sign the Locust image and reduce its size
 
 
 ## Requirements
@@ -39,7 +39,7 @@ This is a password generator application created by Linuxtips. The challenge is 
 
 ## Docker
 
-I've used the [wolfi images from Chainguard](https://www.chainguard.dev/chainguard-images), to build the application with python and use its redis image.
+I've used the [wolfi images from Chainguard](https://www.chainguard.dev/chainguard-images), to build the application with Python and use its Redis image.
 
 We can test them locally with docker compose:
 
@@ -53,11 +53,12 @@ Log into docker in the terminal (use your username):
 
 Push the image you created:
 
-    docker push mmazoni/linuxtips-giropops-senhas:3.0
+    docker push mmazoni/linuxtips-giropops-senhas:3.1
+    docker push mmazoni/locust-giropops:1.1
 
 ## Trivy Report
 
-The wolfi image for python has no vulnerabilities, only the python libs have vulnerabilities, updating the libraries into the fixed versions make the image with 0 vulnerability.
+The wolfi image for Python has no vulnerabilities, only the Python libs have vulnerabilities, updating the libraries into the fixed versions makes the image with 0 vulnerabilities.
 
 ### Before
 
@@ -73,7 +74,7 @@ The wolfi image for python has no vulnerabilities, only the python libs have vul
 
 Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we can give the command to verify the signature:
 
-    cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
+    cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.1
 
 ## Kube-linter
 
@@ -96,7 +97,7 @@ Then, add the hosts necessary for the project:
 
 ## Create KinD cluster
 
-1. Install [kind](https://kind.sigs.k8s.io/) to use Kubernetes in Docker locally and kubectl to work with kubernetes API through your terminal.
+1. Install [kind](https://kind.sigs.k8s.io/) to use Kubernetes in Docker locally and kubectl to work with Kubernetes API through your terminal.
 
 2. Use this command to create the cluster:
 
@@ -107,7 +108,7 @@ Then, add the hosts necessary for the project:
     kubectl apply -k manifests/overlays/kind
     kubectl apply -f manifests/overlays/kind/specific
 
-2. See if all pods is running, then access the application
+2. See if all pods are running, then access the application
 
     kubectl get pods -n giropops
 
@@ -124,15 +125,15 @@ Then, add the hosts necessary for the project:
     terraform init
     terraform apply
 
-3. After that, you cluster will be created and you already connected to it. All the necessary manifests should be applied too.
+3. After that, your cluster will be created and you are already connected to it. All the necessary manifests should be applied too.
 
 4. See if it is working:
 
     kubectl get nodes
 
-Now, you can access `giropops-senhas` by the public ip that Terraform shows as output after finishing the provisioning.
+Now, you can access `giropops-senhas` by the public IP that Terraform shows as output after finishing the provisioning.
 
-http://<public_ip>
+[http://<public_ip>](http://<public_ip>)
 
 ## Monitoring with Prometheus and Grafana
 
@@ -152,10 +153,6 @@ http://<public_ip>
     kubectl get pods -n monitoring
 
 
-## Apply the manifests
-
-
-
 Access here: http://prometheus.kubernetes.local/targets?search=
 
 #### Service Monitor
@@ -170,7 +167,7 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 
 ## HPA and Locust
 
-1. This part we will configure the HorizontalPodAutoscaler and use Locust for the stress testing. First, a requirement of HPA is the Metric Server:
+1. In This part we will configure the HorizontalPodAutoscaler and use Locust for the stress testing. First, a requirement of HPA is the Metric Server:
 
     kubectl apply -k manifests/base/oke
 
@@ -183,11 +180,11 @@ Now we can obtain CPU and memory metrics from nodes and pods
     kubectl top nodes
     kubectl top pods
 
-3. Access the http://<public_ip>:3000
+3. Access the [http://<public_ip>:3000](http://<public_ip>:3000)
 Set the users as 1000 and the rate per second as 100.
 
 ![Locust load tests](static/locust-tests.png)
 
-Here is the pods resource monitoring in Grafana:
+Here is the pods' resource monitoring in Grafana:
 
 ![Grafana Pods Monitoring](static/granafa-locust.png)
