@@ -1,21 +1,29 @@
-# Giropops Senha
+# Giropops Senhas
+
+This is a password generator application created by Linuxtips. The challenge is to put this into a kubernetes cluster with all we learned in PICK (Programa Intensivo de Containers e Kubernetes).
 
 ### Summary
 
-- [~~Requirements~~](#requirements)
-- [~~Lightweight image~~](#docker)
-- [~~Push images to DockerHub~~](#dockerhub)
-- [~~Report of image vulnerabilities on readme~~](#trivy-report)
-- [~~Signed images~~](#verify-image-signature)
-- [~~Kube-linter~~](#kube-linter)
-- [~~KinD Cluster~~](#create-kind-cluster)
-- [~~Monitoring with Prometheus~~](#monitoring-with-prometheus-and-grafana)
-- [~~Apply the manifests~~](#apply-the-manifests)
-- [~~Configure with OCI~~](#run-cluster-in-oke)
-- [~~Performance Test - Locust~~](#hpa-and-locust)
-- [Automation with GitHub Actions](#)
-- [Cert Manager](#)
-- [Documentation on readme file](#)
+- [Requirements](#requirements)
+- [Docker images](#docker)
+- [Push images to DockerHub](#dockerhub)
+- [Report of image vulnerabilities on readme](#trivy-report)
+- [Signed images](#verify-image-signature)
+- [Kube-linter](#kube-linter)
+- [KinD Cluster](#create-kind-cluster)
+- [Run cluster in OKE](#run-cluster-in-oke)
+- [Monitoring with Prometheus](#monitoring-with-prometheus-and-grafana)
+- [Performance Test - Locust~~](#hpa-and-locust)
+
+
+## TODO
+
+- [ ] Automation with GitHub Actions Deploying application in OKE
+- [ ] Cert Manager
+- [ ] Complete Documentation on readme file
+- [ ] Fix Service and Pod Monitors not working in OKE
+- [ ] Sign Locust image and reduce its size
+
 
 ## Requirements
 
@@ -24,10 +32,10 @@
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 - [kube-linter](https://github.com/stackrox/kube-linter#installing-kubelinter) (optional)
-- [ingress](#)
-- [kube-prometheus](#)
-- [terraform](#)
-- [oci-cli](#)
+- [ingress](https://docs.nginx.com/nginx-ingress-controller/installation/installing-nic/installation-with-manifests/)
+- [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus)
+- [terraform](https://developer.hashicorp.com/terraform/install)
+- [oci-cli](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#InstallingCLI)
 
 ## Docker
 
@@ -94,6 +102,37 @@ Then, add the hosts necessary for the project:
 
     kind create cluster --config=config/kind/cluster.yml
 
+### Apply the manifests
+
+    kubectl apply -k manifests/overlays/kind
+    kubectl apply -f manifests/overlays/kind/specific
+
+2. See if all pods is running, then access the application
+
+    kubectl get pods -n giropops
+
+* http://giropops-senhas.kubernetes.local/
+* http://grafana.kubernetes.local
+* http://prometheus.kubernetes.local
+
+## Run cluster in OKE
+
+1. Authenticate in OCI following this guide here: https://github.com/Rapha-Borges/oke-free
+
+2. Then create the infrastructure with Terraform:
+
+    terraform init
+    terraform apply
+
+3. After that, you cluster will be created and you already connected to it. All the necessary manifests should be applied too.
+
+4. See if it is working:
+
+    kubectl get nodes
+
+Now, you can access `giropops-senhas` by the public ip that Terraform shows as output after finishing the provisioning.
+
+http://<public_ip>
 
 ## Monitoring with Prometheus and Grafana
 
@@ -115,18 +154,7 @@ Then, add the hosts necessary for the project:
 
 ## Apply the manifests
 
-1. Apply the manifests
 
-    kubectl apply -k manifests/overlays/kind
-    kubectl apply -f manifests/overlays/kind/specific
-
-2. See if all pods is running, then access the application
-
-    kubectl get pods -n giropops
-
-* http://giropops-senhas.kubernetes.local/
-* http://grafana.kubernetes.local
-* http://prometheus.kubernetes.local
 
 Access here: http://prometheus.kubernetes.local/targets?search=
 
@@ -138,27 +166,7 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 
 ![PodMonitor in Prometheus](static/podmonitor-prometheus.png)
 
-[TODO] serviceMonitor and PodMonitor not working in OKE
 
-
-## Run cluster in OKE
-
-1. Authenticate in OCI following this guide here: https://github.com/Rapha-Borges/oke-free
-
-2. Then create the infrastructure with Terraform:
-
-    terraform init
-    terraform apply
-
-3. After that, you cluster will be created and you already connected to it. All the necessary manifests should be applied too.
-
-4. See if it is working:
-
-    kubectl get nodes
-
-Now, you can access `giropops-senhas` by the public ip that Terraform shows as output after finishing the provisioning.
-
-http://<public_ip>
 
 ## HPA and Locust
 
@@ -183,6 +191,3 @@ Set the users as 1000 and the rate per second as 100.
 Here is the pods resource monitoring in Grafana:
 
 ![Grafana Pods Monitoring](static/granafa-locust.png)
-
-## TODO
-- [] Optimize Locust docker image and sign it
