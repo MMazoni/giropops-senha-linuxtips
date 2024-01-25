@@ -47,7 +47,7 @@ jobs:
       - name: Verifying vulnerabilities with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{ env.DOCKER_IMAGE }}:${{ github.sha }}'
+          image-ref: 'flask:latest'
           format: 'sarif'
           output: 'trivy-results.sarif'
       - name: Upload results in security tab
@@ -66,4 +66,3 @@ jobs:
           cosign verify ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest \
             --certificate-identity https://github.com/MMazoni/giropops-senha-linuxtips/.github/workflows/build.yml@${{ github.ref }} \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
-
