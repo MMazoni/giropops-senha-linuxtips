@@ -56,5 +56,10 @@ jobs:
         run: |
           cosign sign --yes ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
           cosign sign --yes ${{ env.DOCKER_IMAGE }}:latest
+      - name: Verify image
+        run: |
+          cosign verify ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest \
+            --certificate-identity https://github.com/MMazoni/giropops-senha-linuxtips/.github/workflows/deploy.yml@refs/heads/main \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
     needs: lint
 
