@@ -76,13 +76,15 @@ Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we
 
     cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
 
-In the GitHub Actions workflow, we are using keyless signing, so to verify use the command below:
+In the GitHub Actions workflow, we are using [keyless signing](https://docs.sigstore.dev/verifying/verify/#keyless-verification-using-openid-connect), so all next images will be verified using the command below:
 
 ```
 cosign verify mmazoni/linuxtips-giropops-senhas:latest \
   --certificate-identity https://github.com/MMazoni/giropops-senha-linuxtips/.github/workflows/deploy.yml@refs/heads/main \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
 ```
+
+The guide I used to set up the keyless signing in GitHub Actions -> https://blog.saintmalik.me/keyless-signing-container-images-github-oidc/
 
 ## Kube-linter
 
