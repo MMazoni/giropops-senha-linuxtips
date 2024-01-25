@@ -34,27 +34,41 @@ jobs:
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'HIGH,CRITICAL'
+      - name: Upload results in security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
       - name: Docker build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: dockerfile/app.dockerfile
-          push: true
+          push: false
           tags: |
+            docker.io/${{ env.DOCKER_IMAGE }}:${{ github.sha }}
             ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
             ${{ env.DOCKER_IMAGE }}:latest
+      - run: |
+          docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          docker push ${{ env.DOCKER_IMAGE }}:latest
 
-      - run: docker pull mmazoni/locust-giropops:1.1
-      - name: Verifying vulnerabilities with Trivy
+      - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'mmazoni/locust-giropops:1.1'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-      - name: Upload results in security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results.sarif'
+          image-ref: 'docker.io/${{ env.DOCKER_IMAGE }}:${{ github.sha }}'
+          format: 'table'
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.2.0

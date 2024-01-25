@@ -6,7 +6,7 @@ COPY ./app/requirements.txt .
 
 RUN pip install -r requirements.txt --user
 
-FROM cgr.dev/chainguard/python:latest
+FROM python:3.12
 
 WORKDIR /app
 # Make sure you update Python version in path
