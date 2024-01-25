@@ -1,0 +1,38 @@
+---
+name: Linter
+
+on:
+  pull_request:
+    - main
+  paths:
+    - 'app/**'
+    - 'dockerfile/app.dockerfile'
+
+jobs:
+  hadolint:
+    name: Lint the Dockerfile
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: dockerfile/app.dockerfile
+      - name: Update Pull Request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const output = `
+            #### Hadolint: \`${{ steps.hadolint.outcome }}\`
+            \`\`\`
+            ${process.env.HADOLINT_RESULTS}
+            \`\`\`
+            `;
+      
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
