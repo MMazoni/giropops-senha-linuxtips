@@ -44,10 +44,11 @@ jobs:
             ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
             ${{ env.DOCKER_IMAGE }}:latest
 
+      - run: docker pull mmazoni/locust-giropops:1.1
       - name: Verifying vulnerabilities with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'flask:latest'
+          image-ref: 'mmazoni/locust-giropops:1.1'
           format: 'sarif'
           output: 'trivy-results.sarif'
       - name: Upload results in security tab
