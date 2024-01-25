@@ -37,18 +37,18 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Run Trivy vulnerability scanner in repo mode
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'HIGH,CRITICAL'
-      - name: Upload results in security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results.sarif'
+      # - name: Run Trivy vulnerability scanner in repo mode
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     scan-type: 'fs'
+      #     ignore-unfixed: true
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     severity: 'HIGH,CRITICAL'
+      # - name: Upload results in security tab
+      #   uses: github/codeql-action/upload-sarif@v2
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
 
       - name: Docker build and push
         uses: docker/build-push-action@v5
@@ -68,9 +68,14 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'docker.io/${{ env.DOCKER_IMAGE }}:${{ github.sha }}'
-          format: 'table'
+          format: 'sarif'
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
+          output: 'trivy-results.sarif'
+      - name: Upload results in security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.2.0
