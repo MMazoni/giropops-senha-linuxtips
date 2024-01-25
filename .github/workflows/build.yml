@@ -1,13 +1,13 @@
 ---
-name: Continous Integration
+name: Giropops-Senhas Docker build and push
 
 on:
   push:
     branches:
       - main
-    # paths:
-    #   - 'app/**'
-    #   - 'dockerfile/app.dockerfile'
+    paths:
+      - 'app/**'
+      - 'dockerfile/app.dockerfile'
 
 env:
   DOCKERHUB_USERNAME: mmazoni
@@ -15,16 +15,6 @@ env:
   DOCKER_IMAGE: mmazoni/linuxtips-giropops-senhas
 
 jobs:
-  lint:
-    name: Kubernetes Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Kube-linter
-        uses: stackrox/kube-linter-action@v1.0.4
-        with:
-          directory: manifests
-          config: .kube-linter.yml
 
   build:
     name: Build
@@ -59,7 +49,6 @@ jobs:
       - name: Verify image
         run: |
           cosign verify ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest \
-            --certificate-identity https://github.com/MMazoni/giropops-senha-linuxtips/.github/workflows/deploy.yml@refs/heads/main \
+            --certificate-identity https://github.com/MMazoni/giropops-senha-linuxtips/.github/workflows/build.yml@${{ github.ref }} \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
-    needs: lint
 

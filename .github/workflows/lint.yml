@@ -1,0 +1,19 @@
+---
+name: Lint
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Kubernetes Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Kube-linter
+        uses: stackrox/kube-linter-action@v1.0.4
+        with:
+          directory: manifests
+          config: .kube-linter.yml
