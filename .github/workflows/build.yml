@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - github-actions-deploy
     paths:
       - 'app/**'
       - 'dockerfile/app.dockerfile'
