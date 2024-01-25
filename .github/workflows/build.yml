@@ -28,6 +28,8 @@ jobs:
       actions: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: github-actions-deploy
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
