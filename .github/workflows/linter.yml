@@ -3,10 +3,14 @@ name: Linter
 
 on:
   pull_request:
-    - main
-  paths:
-    - 'app/**'
-    - 'dockerfile/app.dockerfile'
+    types:
+      - opened
+        reopened
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'dockerfile/app.dockerfile'
 
 jobs:
   hadolint:
