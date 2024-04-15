@@ -8,10 +8,10 @@ on:
         reopened
     branches:
       - main
-    paths:
-      - '.github/workflows/linter.yml'
-      - 'app/**'
-      - 'dockerfile/app.dockerfile'
+      #    paths:
+      #      - '.github/workflows/linter.yml'
+      #      - 'app/**'
+      #      - 'dockerfile/app.dockerfile'
 
 jobs:
   hadolint:
