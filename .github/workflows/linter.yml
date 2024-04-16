@@ -1,0 +1,23 @@
+---
+name: Linter
+
+on:
+  pull_request:
+    branches:
+      - main
+      #    paths:
+      #      - '.github/workflows/linter.yml'
+      #      - 'app/**'
+      #      - 'dockerfile/app.dockerfile'
+
+jobs:
+  hadolint:
+    name: Lint the Dockerfile
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: dockerfile/app.dockerfile
+          config: config/hadolint/hadolint-config.yaml
