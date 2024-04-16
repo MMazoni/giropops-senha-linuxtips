@@ -23,6 +23,7 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: dockerfile/app.dockerfile
+          config: configs/hadolint/hadolint-config.yaml
       - name: Update Pull Request
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
