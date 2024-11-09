@@ -1,4 +1,4 @@
 Flask==2.2.5
 redis==4.5.4
 prometheus-client==0.16.0
-Werkzeug==2.3.8
+Werkzeug==3.0.6
