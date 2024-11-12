@@ -109,16 +109,22 @@ Then, add the hosts necessary for the project:
 
 2. Use this command to create the cluster:
 
-    kind create cluster --config=config/kind/cluster.yml
+```sh
+kind create cluster --config=config/kind/cluster.yml
+```
 
 ### Apply the manifests
 
-    kubectl apply -k manifests/overlays/kind
-    kubectl apply -f manifests/overlays/kind/specific
+```sh
+kubectl apply -k manifests/overlays/kind
+kubectl apply -f manifests/overlays/kind/specific
+```
 
 2. See if all pods are running, then access the application
 
-    kubectl get pods -n giropops
+```sh
+kubectl get pods -n giropops
+```
 
 * http://giropops-senhas.kubernetes.local/
 * http://grafana.kubernetes.local
@@ -130,14 +136,18 @@ Then, add the hosts necessary for the project:
 
 2. Then create the infrastructure with Terraform:
 
-    terraform init
-    terraform apply
+```sh
+terraform init
+terraform apply
+```
 
 3. After that, your cluster will be created and you are already connected to it. All the necessary manifests should be applied too.
 
 4. See if it is working:
 
-    kubectl get nodes
+```sh
+kubectl get nodes
+```
 
 Now, you can access `giropops-senhas` by the public IP that Terraform shows as output after finishing the provisioning.
 
@@ -147,18 +157,24 @@ Now, you can access `giropops-senhas` by the public IP that Terraform shows as o
 
 1. We will use the [kube-prometheus](https://github.com/prometheus-operator/kube-prometheus) to start monitoring `giropops-senhas`. Now, install the CRDs(Custom Resource Definitions) of kube-prometheus:
 
-    git clone https://github.com/prometheus-operator/kube-prometheus ~/kube-prometheus
-    cd ~/kube-prometheus
-    kubectl create -f manifests/setup
+```sh
+git clone https://github.com/prometheus-operator/kube-prometheus ~/kube-prometheus
+cd ~/kube-prometheus
+kubectl create -f manifests/setup
+```
 
 2. Then, install the services (Prometheus, Grafana, Alertmanager, Blackbox, etc)
 
-    kubectl apply -f manifests/
+```sh
+kubectl apply -f manifests/
+```
 
 3. Check if everything installed properly:
 
-    kubectl get servicemonitors -n monitoring
-    kubectl get pods -n monitoring
+```sh
+kubectl get servicemonitors -n monitoring
+kubectl get pods -n monitoring
+```
 
 
 Access here: http://prometheus.kubernetes.local/targets?search=
@@ -177,16 +193,22 @@ Access here: http://prometheus.kubernetes.local/targets?search=
 
 1. In This part we will configure the HorizontalPodAutoscaler and use Locust for the stress testing. First, a requirement of HPA is the Metric Server:
 
-    kubectl apply -k manifests/base/oke
+```sh
+kubectl apply -k manifests/base/oke
+```
 
 2. See if it's installed and wait for the :
 
-    kubectl get pods -n kube-system | grep metrics-server
+```sh
+kubectl get pods -n kube-system | grep metrics-server
+```
 
 Now we can obtain CPU and memory metrics from nodes and pods
 
-    kubectl top nodes
-    kubectl top pods
+```sh
+kubectl top nodes
+kubectl top pods
+```
 
 3. Access the [http://<public_ip>:3000](http://<public_ip>:3000)
 Set the users as 1000 and the rate per second as 100.
