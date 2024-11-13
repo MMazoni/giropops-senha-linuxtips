@@ -43,18 +43,24 @@ I've used the [wolfi images from Chainguard](https://www.chainguard.dev/chaingua
 
 We can test them locally with docker compose:
 
-    docker compose up
+```sh
+docker compose up
+```
 
 ## DockerHub
 
 Log into docker in the terminal (use your username):
 
-    docker login -u mmazoni
+```sh
+docker login -u mmazoni
+```
 
 Push the image you created:
 
-    docker push mmazoni/linuxtips-giropops-senhas:3.1
-    docker push mmazoni/locust-giropops:1.1
+```sh
+docker push mmazoni/linuxtips-giropops-senhas:3.1
+docker push mmazoni/locust-giropops:1.1
+```
 
 ## Trivy Report
 
@@ -74,11 +80,13 @@ The wolfi image for Python has no vulnerabilities, only the Python libs have vul
 
 Install [cosign](https://docs.sigstore.dev/system_config/installation). Then, we can give the command to verify the signature:
 
-    cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
+```sh
+cosign verify --key=dockerfile/cosign.pub mmazoni/linuxtips-giropops-senhas:3.0
+```
 
 In the GitHub Actions workflow, we are using keyless signing, so to verify use the command below:
 
-```
+```sh
 cosign verify mmazoni/linuxtips-giropops-senhas:latest \
   --certificate-identity https://github.com/MMazoni/giropops-senha-linuxtips/.github/workflows/deploy.yml@refs/heads/main \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com | jq
@@ -88,20 +96,26 @@ cosign verify mmazoni/linuxtips-giropops-senhas:latest \
 
 Kube-linter is configured (GitHub Actions) to run when merging/pushing to `main` branch. You can run locally too, if you want:
 
-    kube-linter lint manifests/ --config .kube-linter.yml
+```sh
+kube-linter lint manifests/ --config .kube-linter.yml
+```
 
 ## Local Hosts configuration
 
 Edit the hosts to the application work with ingress.
 
-    sudo vim /etc/hosts
+```sh
+sudo vim /etc/hosts
+```
 
 Then, add the hosts necessary for the project:
 
-    127.0.0.1    giropops-senhas.kubernetes.local
-    127.0.0.1    grafana.kubernetes.local
-    127.0.0.1    prometheus.kubernetes.local
-    127.0.0.1    alertmanager.kubernetes.local
+```
+127.0.0.1    giropops-senhas.kubernetes.local
+127.0.0.1    grafana.kubernetes.local
+127.0.0.1    prometheus.kubernetes.local
+127.0.0.1    alertmanager.kubernetes.local
+```
 
 ## Create KinD cluster
 
@@ -114,6 +128,8 @@ kind create cluster --config=config/kind/cluster.yml
 ```
 
 ### Apply the manifests
+
+> First you need to install the [CRDs](##monitoring-with-prometheus-and-grafana).
 
 ```sh
 kubectl apply -k manifests/overlays/kind
