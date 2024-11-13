@@ -1,0 +1,7 @@
+apiVersion: v2
+name: giropops-senhas
+description: Esse é o chart do giropops-senhas, criado nas aulas do PICK 2024
+version: 0.1.0
+appVersion: 0.1.0
+sources:
+  - https://github.com/MMazoni/giropops-senha-linuxtips
